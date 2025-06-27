@@ -12,3 +12,4 @@ def create_user_table():
     ''')
     conn.commit()
     conn.close()
+
