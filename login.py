@@ -1,3 +1,3 @@
 import streamlit as st
 
-st.title("회원가입")
+st.title("로그인")
