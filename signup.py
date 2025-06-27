@@ -1,6 +1,7 @@
 import streamlit as st
 
 def signup_page():
+    st.title("회원가입")
     with st.form("signup_form"):
         new_username = st.text_input("아이디", placeholder="아이디를 입력해주세요.")
         new_password = st.text_input("비밀번호", type="password", placeholder= "비밀번호를 입력해주세요.")
