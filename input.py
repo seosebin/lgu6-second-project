@@ -12,6 +12,26 @@ option = st.multiselect(
     ('발열', '기침', '피로', '호흡곤란')
 )
 
+st.subheader('해당사항')
+
+options = ["낮음", "정상", "높음"]
+selection1 = st.segmented_control(
+    "혈압", options, selection_mode="single",
+    key="chole_lv"
+)
+
+if selection1 is not None:
+    st.markdown(f"측정된 혈압 수치는 {selection1}입니다.")
+
+options = ["낮음", "정상", "높음"]
+selection2 = st.segmented_control(
+    "콜레스테롤", options, selection_mode="single",
+    key="blood_prs_lv"
+)
+if selection2 is not None:
+    st.markdown(f"측정된 콜레스테롤 수치는 {selection2}입니다.")
+
+
 if st.button("선택하기"):
     if not option:
         st.warning("증상을 선택해주세요.")
