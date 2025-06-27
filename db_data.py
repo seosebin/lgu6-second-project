@@ -13,7 +13,6 @@ def create_user_table():
     conn.commit()
     conn.close()
 
-
 def add_user_details():
     conn = sqlite3.connect('details.db')
     cursor = conn.cursor()
@@ -32,4 +31,3 @@ def add_user_details():
     conn.close()
     
 add_user_details()
-
