@@ -30,4 +30,6 @@ def add_user_details():
     ''')
     conn.commit()
     conn.close()
+    
+add_user_details()
 
