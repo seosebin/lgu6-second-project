@@ -3,8 +3,6 @@ import sqlite3
 from db_data import create_user_table
 
 
-st.markdown("<h2 style='font-size:28px;'>🩺 MediMento - 증상 기반 질병 예측 및 약 추천 서비스</h2>", unsafe_allow_html=True)
-
 def authenticate_user(username, password):
     conn = sqlite3.connect('users.db')
     cursor = conn.cursor()
