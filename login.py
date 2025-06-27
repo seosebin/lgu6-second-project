@@ -13,11 +13,11 @@ if "username" not in st.session_state:
     st.session_state["username"] = ""
 
 def login():
-    st.title("로그인")
+    st.subheader("로그인")
     username = st.text_input("사용자 이름")
     password = st.text_input("비밀번호", type="password")
 
-    if st.button("로그인"):
+    if st.button("로그인", key = 'login_btn'):
         if username in accounts and accounts[username] == password:
             st.session_state["username"] = username
             st.session_state["logged_in"] = True
@@ -31,19 +31,12 @@ def main_background():
 
     st.title(f"🩺 MediMento")
     st.subheader(f"{username} 님, 환영합니다!")
-    st.header('st.selectbox')
-    option = st.selectbox(
-        '증상을 선택해주세요.',
-        ('발열', '기침', '피로', '호흡 곤란')
-    )
-
-    if option == '발열':
-        st.write('???')
-    elif option == '기침':
-        st.write
 
 if st.session_state["logged_in"]:
     main_background()
+    if st.button("로그아웃", key = 'logout_btn'):
+        st.session_state["logged_in"] = False
+        st.session_state["username"] = ""
+        st.rerun()
 else:
     login()
-
