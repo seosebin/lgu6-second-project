@@ -47,11 +47,3 @@ if st.session_state["logged_in"]:
 else:
     login()
 
-
-# st.header('st.selectbox')
-
-# option = st.selectbox(
-#     '증상을 선택해 주세요.',
-#     ('발열', '기침', '피로', '호흡곤란')
-# )
-
