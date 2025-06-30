@@ -5,6 +5,9 @@ import sqlite3
 from db_data import create_user_symptoms_table, create_user_details_table
 from db_data import insert_user_details, insert_user_symptoms
 
+if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
+    st.warning("🚫 로그인 후 이용 가능한 페이지입니다.")
+    st.stop()
 
 def get_user_info_from_db(user_id):
     conn = sqlite3.connect('users.db')
@@ -89,15 +92,18 @@ if st.button("선택하기"):
             'Gender': user_info.get('gender')
         }
 
-        st.write("사용자 증상 데이터:")
-        st.json(new_patient)
+    
 
         user_symptoms = []
         for key, value in new_patient.items():
-            if key in ['열', '기침', '피로', '호흡곤란'] and value == 'Yes':
+            if key == '호흡곤란' and value == 'Yes':
+                user_symptoms.append('호흡')
+            if key in ['열', '기침', '피로'] and value == 'Yes':
                 user_symptoms.append(key)
             elif key in ['혈압', '콜레스테롤'] and value == '높음':
                 user_symptoms.append(key)
+
+
 
         new_patient_df = pd.DataFrame([new_patient])
         predicted_class = loaded_model.predict(new_patient_df)[0]
