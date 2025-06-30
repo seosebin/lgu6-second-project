@@ -15,6 +15,10 @@ def create_user_table():
     conn.commit()
     conn.close()
 
+import sqlite3
+
+def add_user_details():
+    conn = sqlite3.connect('details.db')
 def create_user_symptoms_table():
     conn = sqlite3.connect('users.db')
     cursor = conn.cursor()
@@ -44,13 +48,15 @@ def create_user_details_table():
             disease TEXT NOT NULL,
             item1 TEXT NOT NULL,
             item2 TEXT NOT NULL,
-            item3 TEXT NOT NULL
+            item3 TEXT NOT NULL,
+            age INTEGER,
+            gender TEXT
         )
     ''')
     conn.commit()
     conn.close()
 
-########## 삽입
+
 def insert_user(username, password, gender, age):
     conn = sqlite3.connect('users.db')
     cursor = conn.cursor()
