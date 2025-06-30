@@ -1,2 +1,7 @@
 streamlit
-streamlit_option_menu
+pandas
+numpy
+scikit-learn
+joblib
+scipy
+scikit-optimize

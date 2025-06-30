@@ -13,6 +13,8 @@ def create_user_table():
     conn.commit()
     conn.close()
 
+import sqlite3
+
 def add_user_details():
     conn = sqlite3.connect('details.db')
     cursor = conn.cursor()
@@ -24,10 +26,10 @@ def add_user_details():
             disease TEXT NOT NULL,
             item1 TEXT NOT NULL,
             item2 TEXT NOT NULL,
-            item3 TEXT NOT NULL
+            item3 TEXT NOT NULL,
+            age INTEGER,
+            gender TEXT
         )
     ''')
     conn.commit()
     conn.close()
-    
-add_user_details()
