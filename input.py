@@ -2,6 +2,9 @@ import streamlit as st
 import joblib
 import pandas as pd
 import sqlite3
+import sqlite3
+from db_data import create_user_symptoms_table, create_user_details_table
+from db_data import insert_user_details, insert_user_symptoms
 
 
 def get_user_info_from_db(user_id):
@@ -31,6 +34,13 @@ medicine_df = pd.read_csv('data/drug_info.csv')
 
 st.title('증상 입력 및 질병 예측')
 
+create_user_symptoms_table()
+create_user_details_table()
+
+st.title('증상 입력')
+user_id = st.session_state["username"]
+
+
 option = st.multiselect(
     '증상을 선택해 주세요.',
     ('발열', '기침', '피로', '호흡곤란')
@@ -40,7 +50,10 @@ st.subheader('해당사항')
 
 bp_options = ["낮음", "정상", "높음"]
 selection1 = st.segmented_control(
-    "혈압", bp_options, selection_mode="single", key="chole_lv"
+    label="혈압",
+    options=bp_options,
+    selection_mode="single",
+    key="blood_pressure"
 )
 
 if selection1:
@@ -48,8 +61,12 @@ if selection1:
 
 chol_options = ["낮음", "정상", "높음"]
 selection2 = st.segmented_control(
-    "콜레스테롤", chol_options, selection_mode="single", key="blood_prs_lv"
+    label="콜레스테롤",
+    options=chol_options,
+    selection_mode="single",
+    key="cholesterol"
 )
+
 
 if selection2:
     st.markdown(f"📈 측정된 콜레스테롤 수치는 **{selection2}** 입니다.")
@@ -106,3 +123,29 @@ if st.button("선택하기"):
                 st.markdown("---")
         else:
             st.info("추천할 약이 없습니다.")
+        fever = 1 if '발열' in option else 0
+        cough = 1 if '기침' in option else 0
+        fatigue = 1 if '피로' in option else 0
+        difficulty_breathing = 1 if '호흡곤란' in option else 0
+        bp_mapping = {"낮음": "low", "정상": "normal", "높음": "high"}
+        blood_pressure = bp_mapping.get(selection1)
+        cholesterol = bp_mapping.get(selection2)
+        
+        insert_user_symptoms(
+            user_id=user_id,
+            fever=fever,
+            cough=cough,
+            fatigue=fatigue,
+            difficulty_breathing=difficulty_breathing,
+            blood_pressure=blood_pressure,
+            cholesterol=cholesterol
+        )
+
+        # insert_user_details(
+        #     user_id=user_id,
+        #     symptoms=", ".join(option),
+        #     disease="",
+        #     item1="",
+        #     item2="",
+        #     item3=""
+        # )
