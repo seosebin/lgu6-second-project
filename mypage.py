@@ -1,4 +1,6 @@
 import streamlit as st
+import sqlite3
+from db_data import update_user_info
 
 # 로그인 여부 확인
 if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
@@ -28,5 +30,16 @@ with tab2:
     chg_password = st.text_input("비밀번호", placeholder="변경할 비밀번호를 입력해주세요", type = "password")
     chg_gender = st.selectbox("성별",("선택", "남성", "여성"))
     chg_age = st.slider("나이", 0, 110, 25)
-    if st.button("수정 완료", key = "submit_edit"):
-        st.success("회원정보가 수정되었습니다!")
+    if st.button("수정 완료", key="submit_edit"):
+        if chg_username and chg_password and chg_gender != "선택":
+            update_user_info(
+                current_username=st.session_state["username"],
+                new_username=chg_username,
+                new_password=chg_password,
+                gender=chg_gender,
+                age=chg_age
+            )
+            st.session_state["username"] = chg_username 
+            st.success("회원정보가 수정되었습니다")
+        else:
+            st.warning("모든 항목을 입력해주세요")

@@ -1,5 +1,5 @@
 import sqlite3
-
+########## 생성
 def create_user_table():
     conn = sqlite3.connect('users.db')
     cursor = conn.cursor()
@@ -7,7 +7,9 @@ def create_user_table():
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT NOT NULL UNIQUE,
-            password TEXT NOT NULL
+            password TEXT NOT NULL,
+            gender TEXT,
+            age INTEGER
         )
     ''')
     conn.commit()
@@ -48,6 +50,7 @@ def create_user_details_table():
     conn.commit()
     conn.close()
 
+########## 삽입
 def insert_user(username, password, gender, age):
     conn = sqlite3.connect('users.db')
     cursor = conn.cursor()
@@ -74,5 +77,17 @@ def insert_user_details(user_id, symptoms, disease, item1, item2, item3):
         INSERT INTO details (user_id, symptoms, disease, item1, item2, item3)
         VALUES (?, ?, ?, ?, ?, ?)
     ''', (user_id, symptoms, disease, item1, item2, item3))
+    conn.commit()
+    conn.close()
+
+########## 수정
+def update_user_info(current_username, new_username, new_password, gender, age):
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    cursor.execute("""
+        UPDATE users 
+        SET username = ?, password = ?, gender = ?, age = ?
+        WHERE username = ?
+    """, (new_username, new_password, gender, age, current_username))
     conn.commit()
     conn.close()
