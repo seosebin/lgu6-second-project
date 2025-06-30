@@ -37,7 +37,6 @@ if selected == "질병":
     if df.empty:
         st.info("표시할 질병 데이터가 없습니다.")
     else:
-        # disease 한글명 매핑 사전 (예: disease_translation)
         disease_translation = {
             'Influenza': '독감',
             'Asthma': '천식',
@@ -119,13 +118,9 @@ if selected == "질병":
         }
 
         diseases = df['disease'].unique()
-        # 한글명 리스트 만들기, key가 영어명, value가 한글명
         disease_kor_list = [disease_translation.get(d, d) for d in diseases]
-
         selected_kor = st.selectbox("질병을 선택하세요", disease_kor_list)
 
-        # 선택한 한글명에 대응하는 영어명 찾기
-        # (한글명으로 딕셔너리에서 영어명 찾아야 하므로 뒤집기)
         kor_to_eng = {v: k for k, v in disease_translation.items()}
         selected_eng = kor_to_eng.get(selected_kor, selected_kor)
 
@@ -186,11 +181,19 @@ elif selected == "약":
     if df.empty:
         st.info("추천된 약 정보가 없습니다")
     else:
+        # 빈 문자열, 공백 제거도 같이 하기
         all_meds = pd.concat([
             df['item1'], df['item2'], df['item3']
         ]).dropna()
+        
+        # 공백이나 빈 문자열 제거
+        all_meds = all_meds[all_meds.str.strip() != ""]
+
         freq = all_meds.value_counts().head(10)
+        
         st.bar_chart(freq)
 
         with st.expander("약별 추천 횟수 보기"):
-            st.dataframe(freq.reset_index().rename(columns={"index": "약 이름", "count": "추천 횟수"}))
+            freq_df = freq.reset_index()
+            freq_df.columns = ["약 이름", "추천 횟수"]
+            st.dataframe(freq_df)
