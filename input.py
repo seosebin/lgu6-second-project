@@ -4,7 +4,7 @@ import pandas as pd
 import sqlite3
 from db_data import create_user_symptoms_table, create_user_details_table
 from db_data import insert_user_details, insert_user_symptoms
-
+ 
 if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
     st.warning("🚫 로그인 후 이용 가능한 페이지입니다.")
     st.stop()
@@ -119,7 +119,7 @@ st.title('증상 입력 및 질병 예측')
 create_user_symptoms_table()
 create_user_details_table()
 
-st.title('증상 입력')
+st.subheader('증상 입력')
 user_id = st.session_state["username"]
 
 
