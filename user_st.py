@@ -27,10 +27,8 @@ if selected == "질병":
     st.subheader("질병별 나이 분포")
 
     conn = sqlite3.connect('users.db')
-
     df_users = pd.read_sql_query("SELECT username AS user_id, age FROM users", conn)
     df_details = pd.read_sql_query("SELECT user_id, disease FROM user_details", conn)
-
     conn.close()
 
     df = df_details.merge(df_users, on="user_id", how="inner")
@@ -43,8 +41,18 @@ if selected == "질병":
 
         filtered_df = df[df['disease'] == selected_disease]
 
-        st.write(f"### 🧬 {selected_disease}의 연령대 분포")
-        st.bar_chart(filtered_df['age'].value_counts(bins=8).sort_index())
+        bins = [0, 9, 19, 29, 39, 49, 59, 69, 150]
+        labels = ['0-9세','10대','20대','30대','40대','50대','60대','70세 이상']
+        filtered_df['age_group'] = pd.cut(filtered_df['age'], bins=bins, labels=labels, right=True)
+
+        age_dist = filtered_df['age_group'].value_counts().sort_index()
+        chart_data = pd.DataFrame({
+            "연령대": age_dist.index,
+            "인원수": age_dist.values
+        })
+
+        st.write(f"### 🧬 {selected_disease}의 연령대 분포 (Scatter Chart)")
+        st.scatter_chart(chart_data.rename(columns={"연령대": "index"}).set_index("index"))
 
 elif selected == "증상":
     st.subheader("연령대별 증상 분포 분석")
