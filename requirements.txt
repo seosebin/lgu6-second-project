@@ -1,8 +1,6 @@
 streamlit
 streamlit_option_menu
 pandas
-
-pandas
 numpy
 scikit-learn
 joblib
