@@ -26,19 +26,40 @@ def get_user_diagnosis(user_id):
      conn.close()
      return row
      
-user_id = st.session_state.get('user_id')
+user_id = st.session_state.get('username')
+
 
 diagnosis = get_user_diagnosis(user_id)
 
-st.header("나의 진단 내역")
+with tab1:
+    st.header("나의 진단 내역")
 
-if diagnosis:
-    symptoms, disease, item1, item2, item3 = diagnosis
-    st.markdown(f"🏣 **증상**: {symptoms}")
-    st.markdown(f"🧬 **질병**: {disease}")
-    st.markdown(f"💊 **약**: {item1}, {item2}, {item3}")
-else:
-    st.info("아직 저장된 진단 내역이 없습니다.")
+    if diagnosis:
+        symptoms, disease, item1, item2, item3 = diagnosis
+
+       
+        with st.container():
+            st.markdown(
+                """
+                <div style="
+                    background-color: #f0f4f8; 
+                    padding: 20px; 
+                    border-radius: 10px; 
+                    box-shadow: 0 2px 4px lightgray;
+                    max-width: 600px;
+                    margin-bottom: 20px;
+                ">
+                    <h3 style="color: #333;">🩺 나의 최근 진단 내역</h3>
+                    <p><strong>🏣 증상:</strong> {symptoms}</p>
+                    <p><strong>🧬 질병:</strong> {disease}</p>
+                    <p><strong>💊 추천 약:</strong> {item1}, {item2}, {item3}</p>
+                </div>
+                """.format(symptoms=symptoms, disease=disease, item1=item1, item2=item2, item3=item3),
+                unsafe_allow_html=True
+            )
+    else:
+        st.info("아직 저장된 진단 내역이 없습니다.")
+
 
 
 # 증상 : 발열, 기침, 피로, 호흡 곤란
