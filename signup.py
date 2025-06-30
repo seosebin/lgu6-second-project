@@ -1,14 +1,6 @@
 import streamlit as st
 import sqlite3
-from db_data import create_user_table
-
-def insert_user(username, password, gender, age):
-    conn = sqlite3.connect('users.db')
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO users (username, password, gender, age) VALUES (?, ?, ?, ?)",
-                   (username, password, gender, age))
-    conn.commit()
-    conn.close()
+from db_data import create_user_table, insert_user
 
 def signup_page():
     st.title("회원가입")
