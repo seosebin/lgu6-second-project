@@ -65,3 +65,21 @@ elif selected == "증상":
     group = df.groupby('age_group')[['fever','cough','fatigue','difficulty_breathing']].mean()
     group.columns = ['발열', '기침', '피로', '호흡곤란']
     st.bar_chart(group)
+
+elif selected == "약":
+    st.subheader("많이 추천된 약 빈도")
+    conn = sqlite3.connect('users.db')
+    df = pd.read_sql_query("SELECT item1, item2, item3 FROM user_details", conn)
+    conn.close()
+
+    if df.empty:
+        st.info("추천된 약 정보가 없습니다")
+    else:
+        all_meds = pd.concat([
+            df['item1'], df['item2'], df['item3']
+        ]).dropna()
+        freq = all_meds.value_counts().head(10)
+        st.bar_chart(freq)
+
+        with st.expander("약별 추천 횟수 보기"):
+            st.dataframe(freq.reset_index().rename(columns={"index": "약 이름", "count": "추천 횟수"}))
