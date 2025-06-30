@@ -96,10 +96,14 @@ if st.button("선택하기"):
 
         user_symptoms = []
         for key, value in new_patient.items():
-            if key in ['열', '기침', '피로', '호흡곤란'] and value == 'Yes':
+            if key == '호흡곤란' and value == 'Yes':
+                user_symptoms.append('호흡')
+            if key in ['열', '기침', '피로'] and value == 'Yes':
                 user_symptoms.append(key)
             elif key in ['혈압', '콜레스테롤'] and value == '높음':
                 user_symptoms.append(key)
+
+
 
         new_patient_df = pd.DataFrame([new_patient])
         predicted_class = loaded_model.predict(new_patient_df)[0]
