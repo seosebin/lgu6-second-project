@@ -231,13 +231,17 @@ if st.button("선택하기"):
             blood_pressure=blood_pressure,
             cholesterol=cholesterol
         )
-        
-        
-        # insert_user_details(
-        #     user_id=user_id,
-        #     symptoms=", ".join(option),
-        #     disease="",
-        #     item1="",
-        #     item2="",
-        #     item3=""
-        # )
+    
+        item_names = recommended_meds['itemName'].tolist()
+        item1 = item_names[0] if len(item_names) > 0 else ""
+        item2 = item_names[1] if len(item_names) > 1 else ""
+        item3 = item_names[2] if len(item_names) > 2 else ""
+
+        insert_user_details(
+            user_id=user_id,
+            symptoms=", ".join(option),
+            disease=predicted_label_kor,
+            item1=item1,
+            item2=item2,
+            item3=item3
+        )

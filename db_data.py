@@ -80,7 +80,7 @@ def insert_user_details(user_id, symptoms, disease, item1, item2, item3):
     conn = sqlite3.connect('users.db')
     cursor = conn.cursor()
     cursor.execute('''
-        INSERT INTO details (user_id, symptoms, disease, item1, item2, item3)
+        INSERT INTO user_details (user_id, symptoms, disease, item1, item2, item3)
         VALUES (?, ?, ?, ?, ?, ?)
     ''', (user_id, symptoms, disease, item1, item2, item3))
     conn.commit()
