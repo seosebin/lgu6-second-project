@@ -119,7 +119,7 @@ st.title('증상 입력 및 질병 예측')
 create_user_symptoms_table()
 create_user_details_table()
 
-st.title('증상 입력')
+st.subheader('증상 입력')
 user_id = st.session_state["username"]
 
 
