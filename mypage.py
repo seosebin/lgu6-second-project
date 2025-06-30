@@ -11,13 +11,34 @@ st.title('👩‍💻마이페이지')
 
 tab1, tab2 = st.tabs(["나의 진단 내역", "회원정보 수정"])
 
-with tab1:
-        st.subheader("나의 진단 내역")
-        st.markdown("""
-        - 🏣 증상: 
-        - 🧬 질병: 
-        - 💊 약: 
-        """)
+
+def get_user_diagnosis(user_id):
+     conn = sqlite3.connect('users.db')
+     cursor = conn.cursor()
+     cursor.execute('''
+        SELECT symptoms, disease, item1, item2, item3
+        FROM user_details
+        WHERE user_id = ? 
+        ORDER BY id DESC
+        LIMIT 1
+    ''', (user_id,))
+     row = cursor.fetchone()
+     conn.close()
+     return row
+     
+user_id = st.session_state.get('user_id')
+
+diagnosis = get_user_diagnosis(user_id)
+
+st.header("나의 진단 내역")
+
+if diagnosis:
+    symptoms, disease, item1, item2, item3 = diagnosis
+    st.markdown(f"🏣 **증상**: {symptoms}")
+    st.markdown(f"🧬 **질병**: {disease}")
+    st.markdown(f"💊 **약**: {item1}, {item2}, {item3}")
+else:
+    st.info("아직 저장된 진단 내역이 없습니다.")
 
 
 # 증상 : 발열, 기침, 피로, 호흡 곤란
