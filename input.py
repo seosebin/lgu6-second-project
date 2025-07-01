@@ -33,6 +33,8 @@ user_info = get_user_info_from_db(user_id)
 loaded_model = joblib.load('predict_model/best_disease_model.joblib')
 label_encoder = joblib.load('predict_model/label_encoder.joblib')
 medicine_df = pd.read_csv('data/drug_info.csv')
+disease_df = pd.read_csv('data/Disease.csv')
+
 
 disease_translation = {
     'Influenza': '독감',
@@ -160,28 +162,45 @@ if st.button("선택하기"):
         st.warning("혈압과 콜레스테롤을 모두 선택해주세요.")
     else:
         user_info = get_user_info_from_db(user_id)
+        
 
+        bp_mapping = {"낮음": "low", "정상": "normal", "높음": "high"}
+        blood_pressure = bp_mapping.get(selection1)
+        cholesterol = bp_mapping.get(selection2)
         new_patient = {
             '열': 'Yes' if '발열' in option else 'No',
             '기침': 'Yes' if '기침' in option else 'No',
             '피로': 'Yes' if '피로' in option else 'No',
             '호흡곤란': 'Yes' if '호흡곤란' in option else 'No',
-            '혈압': selection1,
-            '콜레스테롤': selection2,
+            '혈압': blood_pressure,
+            '콜레스테롤': cholesterol,
             'Age': user_info.get('age'),
             'Gender': user_info.get('gender')
         }
 
     
 
+            
         user_symptoms = []
         for key, value in new_patient.items():
             if key == '호흡곤란' and value == 'Yes':
-                user_symptoms.append('호흡')
-            if key in ['열', '기침', '피로'] and value == 'Yes':
+                user_symptoms.append('호흡곤란')
+            if key in ['발열', '기침', '피로'] and value == 'Yes':
                 user_symptoms.append(key)
             elif key in ['혈압', '콜레스테롤'] and value == '높음':
                 user_symptoms.append(key)
+
+        def symptom_match(efficacy_text):
+            if pd.isna(efficacy_text):
+                return False
+            text = efficacy_text.lower()
+            disease = predicted_label_kor.lower()
+            if disease not in text:
+                return False
+            for symptom in user_symptoms:
+                if symptom.lower() in text:
+                    return True
+            return True
 
 
 
@@ -198,7 +217,13 @@ if st.button("선택하기"):
         def symptom_match(efficacy_text):
             if pd.isna(efficacy_text):
                 return False
-            return any(symptom in efficacy_text for symptom in user_symptoms)
+            if predicted_label_kor in efficacy_text:
+                return True
+            for symptom in user_symptoms:
+                if symptom in efficacy_text:
+                    return True
+            return False
+
 
         matched_meds = medicine_df[medicine_df['efcyQesitm'].apply(symptom_match)]
 
@@ -218,9 +243,7 @@ if st.button("선택하기"):
         cough = 1 if '기침' in option else 0
         fatigue = 1 if '피로' in option else 0
         difficulty_breathing = 1 if '호흡곤란' in option else 0
-        bp_mapping = {"낮음": "low", "정상": "normal", "높음": "high"}
-        blood_pressure = bp_mapping.get(selection1)
-        cholesterol = bp_mapping.get(selection2)
+
         
         insert_user_symptoms(
             user_id=user_id,

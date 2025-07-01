@@ -20,45 +20,43 @@ def get_user_diagnosis(user_id):
         FROM user_details
         WHERE user_id = ? 
         ORDER BY id DESC
-        LIMIT 1
+        LIMIT 3
     ''', (user_id,))
-     row = cursor.fetchone()
+     row = cursor.fetchall()
      conn.close()
      return row
      
 user_id = st.session_state.get('username')
 
 
-diagnosis = get_user_diagnosis(user_id)
+diagnoses = get_user_diagnosis(user_id)
 
 with tab1:
-    st.header("나의 진단 내역")
+    st.header("🩺 나의 최근 진단 내역")
 
-    if diagnosis:
-        symptoms, disease, item1, item2, item3 = diagnosis
-
-       
-        with st.container():
-            st.markdown(
-                """
-                <div style="
-                    background-color: #f0f4f8; 
-                    padding: 20px; 
-                    border-radius: 10px; 
-                    box-shadow: 0 2px 4px lightgray;
-                    max-width: 600px;
-                    margin-bottom: 20px;
-                ">
-                    <h3 style="color: #333;">🩺 나의 최근 진단 내역</h3>
-                    <p><strong>🏣 증상:</strong> {symptoms}</p>
-                    <p><strong>🧬 질병:</strong> {disease}</p>
-                    <p><strong>💊 추천 약:</strong> {item1}, {item2}, {item3}</p>
-                </div>
-                """.format(symptoms=symptoms, disease=disease, item1=item1, item2=item2, item3=item3),
-                unsafe_allow_html=True
-            )
-    else:
+    if not diagnoses:
         st.info("아직 저장된 진단 내역이 없습니다.")
+    else:
+        for idx, (symptoms, disease, item1, item2, item3) in enumerate(diagnoses, start=1):
+       
+            with st.container():
+                st.markdown(
+                    """
+                    <div style="
+                        background-color: #f0f4f8; 
+                        padding: 20px; 
+                        border-radius: 10px; 
+                        box-shadow: 0 2px 4px lightgray;
+                        max-width: 600px;
+                        margin-bottom: 20px;
+                    ">
+                        <p><strong>🏣 증상:</strong> {symptoms}</p>
+                        <p><strong>🧬 질병:</strong> {disease}</p>
+                        <p><strong>💊 추천 약:</strong> {item1}, {item2}, {item3}</p>
+                    </div>
+                    """.format(symptoms=symptoms, disease=disease, item1=item1, item2=item2, item3=item3),
+                    unsafe_allow_html=True
+                )
 
 
 
