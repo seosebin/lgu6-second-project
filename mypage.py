@@ -34,7 +34,9 @@ diagnoses = get_user_diagnosis(user_id)
 with tab1:
     st.header("🩺 나의 최근 진단 내역")
 
-    if diagnoses:
+    if not diagnoses:
+        st.info("아직 저장된 진단 내역이 없습니다.")
+    else:
         for idx, (symptoms, disease, item1, item2, item3) in enumerate(diagnoses, start=1):
        
             with st.container():
@@ -55,8 +57,6 @@ with tab1:
                     """.format(symptoms=symptoms, disease=disease, item1=item1, item2=item2, item3=item3),
                     unsafe_allow_html=True
                 )
-        else:
-            st.info("아직 저장된 진단 내역이 없습니다.")
 
 
 
