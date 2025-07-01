@@ -196,6 +196,8 @@ if st.button("선택하기"):
         st.success(f"예측된 질병: {predicted_label_kor}")
 
         def symptom_match(efficacy_text):
+            if predicted_label_kor in efficacy_text:
+                return True
             if pd.isna(efficacy_text):
                 return False
             return any(symptom in efficacy_text for symptom in user_symptoms)
