@@ -34,6 +34,7 @@ if selected == "질병":
 
     df = df_details.merge(df_users, on="user_id", how="inner")
 
+
     if df.empty:
         st.info("표시할 질병 데이터가 없습니다.")
     else:
@@ -127,8 +128,7 @@ if selected == "질병":
          
         #disease_kor_list = [disease_translation.get(d, d) for d in diseases]
         #selected_kor = st.selectbox("질병을 선택하세요", disease_kor_list)
-
-        filtered_df = df[df['disease'] == selected_eng]
+        filtered_df = df[df['disease'] == selected_label].copy()
         
 
         bins = [0, 9, 19, 29, 39, 49, 59, 69, 150]
@@ -141,6 +141,8 @@ if selected == "질병":
             "연령대": age_dist.index,
             "인원수": age_dist.values
         })
+
+
 
         import altair as alt
 
@@ -168,7 +170,7 @@ elif selected == "증상":
     """, conn)
     conn.close()
 
-    df = df_users.merge(df_symp, on='user_id', how='inner')
+    df = df_users.merge(df_symp, on='user_id', how='inner').copy()
 
     bins = [0, 9, 19, 29, 39, 49, 59, 69, 150]
     labels = ['0-9','10-19','20-29','30-39','40-49','50-59','60-69','70+']
