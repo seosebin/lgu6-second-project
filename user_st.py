@@ -118,13 +118,17 @@ if selected == "질병":
         }
 
         diseases = df['disease'].unique()
-        disease_kor_list = [disease_translation.get(d, d) for d in diseases]
-        selected_kor = st.selectbox("질병을 선택하세요", disease_kor_list)
-
-        kor_to_eng = {v: k for k, v in disease_translation.items()}
-        selected_eng = kor_to_eng.get(selected_kor, selected_kor)
-
+        labels = [f"{d} ({disease_translation[d]})" if d in disease_translation else d for d in diseases]
+        selected_label = st.selectbox("질병을 선택하세요", labels)
+        selected_eng = selected_label.split(" (")[0]
         filtered_df = df[df['disease'] == selected_eng]
+        #disease_kor_list = [disease_translation.get(d, d) for d in diseases]
+        #selected_kor = st.selectbox("질병을 선택하세요", disease_kor_list)
+
+        #kor_to_eng = {v: k for k, v in disease_translation.items()}
+        #selected_eng = kor_to_eng.get(selected_kor, selected_kor)
+
+        #filtered_df = df[df['disease'] == selected_eng]
 
         bins = [0, 9, 19, 29, 39, 49, 59, 69, 150]
         labels = ['0-9세','10대','20대','30대','40대','50대','60대','70세 이상']
@@ -147,7 +151,7 @@ if selected == "질병":
         ).properties(
             width=600,
             height=400,
-            title=f"🧬 {selected_kor}의 연령대 분포 (Scatter)"
+            title=f"🧬 {selected_label}의 연령대 분포 (Scatter)"
         )
 
         st.altair_chart(chart, use_container_width=True)

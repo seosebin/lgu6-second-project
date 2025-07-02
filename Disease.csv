@@ -57,7 +57,7 @@
 109,Osteoarthritis,Yes,Yes,Yes,No,38,Male,High,High,Positive
 110,Pneumonia,Yes,Yes,Yes,Yes,38,Male,Normal,Normal,Positive
 111,Klinefelter Syndrome,No,No,Yes,No,39,Female,Normal,Normal,Positive
-121,Asthma,Yes,No,Yes,No,40,Male,Low,Normal,Positive
+121,Asthma,Yes,No,Yes,N o,40,Male,Low,Normal,Positive
 122,Asthma,Yes,Yes,No,Yes,40,Female,Normal,Normal,Positive
 123,Asthma,Yes,Yes,No,Yes,40,Female,Normal,Normal,Positive
 124,Asthma,No,No,Yes,Yes,40,Male,High,High,Positive
