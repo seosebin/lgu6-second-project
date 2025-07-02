@@ -117,18 +117,18 @@ if selected == "질병":
             'Williams Syndrome': '윌리엄스 증후군'
         }
 
+        
         diseases = df['disease'].unique()
-        labels = [f"{d} ({disease_translation[d]})" if d in disease_translation else d for d in diseases]
+        labels = [disease_translation.get(d, d) for d in diseases]
         selected_label = st.selectbox("질병을 선택하세요", labels)
-        selected_eng = selected_label.split(" (")[0]
-        filtered_df = df[df['disease'] == selected_eng]
+
+        kor_to_eng = {v: k for k, v in disease_translation.items()}
+        selected_eng = kor_to_eng.get(selected_label, selected_label)
+         
         #disease_kor_list = [disease_translation.get(d, d) for d in diseases]
         #selected_kor = st.selectbox("질병을 선택하세요", disease_kor_list)
 
-        #kor_to_eng = {v: k for k, v in disease_translation.items()}
-        #selected_eng = kor_to_eng.get(selected_kor, selected_kor)
-
-        #filtered_df = df[df['disease'] == selected_eng]
+        filtered_df = df[df['disease'] == selected_eng]
         
 
         bins = [0, 9, 19, 29, 39, 49, 59, 69, 150]
